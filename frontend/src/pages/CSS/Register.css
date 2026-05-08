@@ -1,0 +1,111 @@
+/* Register page css */
+
+.register-container{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#f4f6f8;
+}
+
+
+.register-card{
+width:100%;
+max-width:420px;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+
+.register-title{
+text-align:center;
+margin-bottom:20px;
+}
+
+
+.register-input{
+width:100%;
+padding:10px;
+margin-top:12px;
+border:1px solid #ccc;
+border-radius:5px;
+font-size:14px;
+}
+
+
+.register-btn{
+width:100%;
+margin-top:18px;
+padding:10px;
+background:#28a745;
+border:none;
+color:white;
+font-size:16px;
+border-radius:5px;
+cursor:pointer;
+}
+
+.register-btn:hover{
+background:#218838;
+}
+
+
+.register-link{
+text-align:center;
+margin-top:15px;
+font-size:14px;
+}
+
+
+@media(max-width:500px){
+
+.register-card{
+padding:20px;
+margin:10px;
+}
+
+}
+.toast-message {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+
+  background: linear-gradient(135deg, #4CAF50, #2e7d32);
+  color: #fff;
+
+  padding: 16px 22px; /* ✅ better padding */
+  border-radius: 10px;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  animation: slideFadeIn 0.4s ease, fadeOut 0.4s ease 2.6s forwards;
+}
+
+@keyframes slideFadeIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+}

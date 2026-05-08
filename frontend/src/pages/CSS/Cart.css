@@ -1,0 +1,215 @@
+/* Cart page css */
+
+body {
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  font-family: "Poppins", sans-serif;
+}
+.cart-container {
+  display: flex;
+  gap: 25px;
+  padding: 30px;
+  min-height: 70vh;
+  align-items: flex-start;
+}
+.cart-left {
+  flex: 2.3;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.cart-item {
+  display: flex;
+  gap: 18px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  padding: 18px;
+  border-radius: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  align-items: center;
+  transition: 0.3s ease;
+}
+.cart-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(37,99,235,0.12);
+}
+.cart-item img {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  border-radius: 18px;
+  background: #f8fafc;
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+}
+.cart-item h3 {
+  font-size: 19px;
+  margin: 0;
+  color: #0f172a;
+  font-weight: 700;
+}
+.cart-item p {
+  margin: 8px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #16a34a;
+}
+.cart-item div div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+.cart-item button {
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 600;
+}
+.cart-item div div button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e0e7ff;
+  color: #1d4ed8;
+  font-size: 18px;
+}
+.cart-item div div button:hover {
+  background: #2563eb;
+  color: white;
+}
+.cart-item span {
+  font-size: 16px;
+  font-weight: 700;
+  min-width: 25px;
+  text-align: center;
+}
+.cart-item > div > button {
+  margin-top: 14px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  color: white;
+}
+.cart-item > div > button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(239,68,68,0.25);
+}
+.cart-right {
+  flex: 1;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 20px;
+}
+.cart-right h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #0f172a;
+}
+.cart-right p {
+  font-size: 22px;
+  font-weight: 800;
+  color: #16a34a;
+}
+.cart-right button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #2563eb, #06b6d4);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.cart-right button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(37,99,235,0.25);
+}
+.cart-left h2 {
+  padding: 60px;
+  color: #64748b;
+  text-align: center;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+.toast-message {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: white;
+  padding: 16px 22px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  z-index: 9999;
+  animation: slideFadeIn 0.4s ease, fadeOut 0.4s ease 2.6s forwards;
+}
+@keyframes slideFadeIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+}
+@media (max-width: 992px) {
+  .cart-container {
+    flex-direction: column;
+  }
+  .cart-right {
+    width: 100%;
+    position: static;
+  }
+}
+@media (max-width: 768px) {
+  .cart-container {
+    padding: 15px;
+  }
+  .cart-item {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  .cart-item img {
+    width: 110px;
+    height: 110px;
+  }
+  .cart-item div div {
+    justify-content: center;
+  }
+  .cart-right {
+    padding: 20px;
+  }
+}
+@media (max-width: 480px) {
+  .cart-item h3 {
+    font-size: 16px;
+  }
+  .cart-item p {
+    font-size: 16px;
+  }
+  .cart-right h3 {
+    font-size: 18px;
+  }
+  .cart-right p {
+    font-size: 20px;
+  }
+}

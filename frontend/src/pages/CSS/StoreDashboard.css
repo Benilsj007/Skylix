@@ -1,0 +1,112 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f4f6f9;
+}
+
+/* =========================
+   TOP NAVBAR
+========================= */
+.top {
+  height: 60px;
+  background: #1f2937; /* dark slate */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-brand {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* buttons in navbar */
+.top .btn {
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 6px;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+.layout {
+  display: flex;
+  height: calc(100vh - 60px);
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+.side {
+  width: 240px;
+  background: #111827;
+  color: white;
+  padding: 20px 10px;
+  overflow-y: auto;
+}
+
+.sidebar-menu {
+  list-style: none;
+}
+
+.sidebar-menu li {
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 15px;
+}
+
+/* hover effect */
+.sidebar-menu li:hover {
+  background: #374151;
+}
+
+/* active menu */
+.sidebar-menu .active {
+  background: #3b82f6;
+  color: white;
+  font-weight: 500;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background: #f9fafb;
+  overflow-y: auto;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .side {
+    width: 70px;
+    padding: 10px;
+  }
+
+  .sidebar-menu li {
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .navbar-brand {
+    font-size: 14px;
+  }
+}

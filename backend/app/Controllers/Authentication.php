@@ -10,8 +10,8 @@ use App\Models\LaptopModel;
 use App\Models\ElectronicsModel;
 
 class Authentication extends Controller{
-
 /* CORS CONSTRUCTOR */
+
 public function __construct()
 {
     header("Access-Control-Allow-Origin: http://localhost:3000");
@@ -46,6 +46,7 @@ public function login(){
             "user_id" => $user->id,
             "message" => "Login Successful"]);
             } else {
+
                     return $this->response->setJSON([
                            "status" => false,
                            "message" => "Invalid Email or Password"]);
@@ -53,9 +54,11 @@ public function login(){
         }
 
 /* REGISTER */
+
 public function register(){
 
     $db = \Config\Database::connect();
+
     $data = $this->request->getJSON(true);
 
     $name = $data['name'];
@@ -72,7 +75,8 @@ public function register(){
     if ($existingUser) {
         return $this->response->setJSON([
             "status" => false,
-            "message" => "Email already exists"]);
+            "message" => "Email already exists"
+        ]);
     }
 
     //  INSERT USER
@@ -81,7 +85,8 @@ public function register(){
 
     return $this->response->setJSON([
         "status"=>true,
-        "message"=>"Registration Successful"]);
+        "message"=>"Registration Successful"
+    ]);
 }
 
 public function addProduct()
@@ -95,6 +100,7 @@ public function addProduct()
         "description" => $this->request->getPost('description'),
         "stock" => $this->request->getPost('stock')
     ];
+
     // IMAGE
     $image = $this->request->getFile('image');
     if ($image && $image->isValid() && !$image->hasMoved()) {
@@ -102,6 +108,7 @@ public function addProduct()
         $image->move(ROOTPATH . 'public/uploads', $imageName);
         $data["image"] = $imageName;
     }
+
     // INSERT PRODUCT
     $productModel->insert($data);
     $product_id = $productModel->insertID();
@@ -134,8 +141,11 @@ public function addProduct()
             "charger" => $this->request->getPost('charger'),
             "graphics_card" => $this->request->getPost('graphics_card'),
             "screen_size" => $this->request->getPost('screen_size'),
-            "brand" => $this->request->getPost('brand')]);
+            "brand" => $this->request->getPost('brand')
+
+            ]);
     }
+
     else {
         $electronicsModel = new ElectronicsModel();
 
@@ -144,11 +154,15 @@ public function addProduct()
             "type" => $this->request->getPost('type'),
             "power" => $this->request->getPost('power'),
             "warranty" => $this->request->getPost('warranty'),
-            "brand" => $this->request->getPost('brand')]);
+            "brand" => $this->request->getPost('brand')
+
+        ]);
     }
+
     return $this->response->setJSON([
         "status" => true,
-        "message" => "Product Added Successfully"]);
+        "message" => "Product Added Successfully"
+    ]);
 }
 
 /* GET PRODUCTS */
@@ -158,7 +172,7 @@ public function getProducts()
     $builder = $productModel->builder();
 
     $page  = $this->request->getGet('page') ?? 1;
-    $limit = 21; 
+    $limit = 20; 
     $offset = ($page - 1) * $limit;
 
     $builder->select("products.*,
@@ -246,7 +260,9 @@ if (!empty($price)) {
     elseif ($processor == "Apple") {
         $builder->groupStart()
             ->like('mobile_details.processor', 'Bionic')
+            ->orLike('laptop_details.processor', 'M1')
             ->orLike('mobile_details.processor', 'Apple')
+            ->orLike('laptop_details.processor', 'M2')
         ->groupEnd();
     }
     elseif ($processor == "Exynos") {
@@ -274,16 +290,6 @@ if (!empty($price)) {
         ->orLike('laptop_details.processor', 'Ryzen 9')
      ->groupEnd();
   }
-   elseif ($processor == "Apple") {
-      $builder->groupStart()
-        ->like('laptop_details.processor', 'Apple M1')
-        ->orLike('laptop_details.processor', 'Apple M2')
-        ->orLike('laptop_details.processor', 'Apple M3')
-        ->orLike('laptop_details.processor', 'Apple M4')
-        ->orLike('laptop_details.processor', 'Apple M5')
-        ->orLike('laptop_details.processor', 'Apple M6')
-     ->groupEnd();
-  }
  }
   if (!empty($ram)) {
     $builder->groupStart()
@@ -291,30 +297,18 @@ if (!empty($price)) {
         ->orWhere("laptop_details.ram REGEXP '(^|[^0-9]){$ram}([^0-9]|$)'", null, false)
     ->groupEnd();
   }
-if (!empty($storage)) {
-
-    $builder->groupStart()
-            ->like('mobile_details.storage', $storage)
-            ->orLike('laptop_details.storage', $storage)
-            ->groupEnd();
-}
- if (!empty($camera)) {
-
-    $cameraValue = (int)$camera;
-
-    // Extract first MP value only
-    $cameraField = "
-        CAST(
-            SUBSTRING_INDEX(
-                REGEXP_REPLACE(mobile_details.camera, '[^0-9 ]', ''),
-                ' ',
-                1
-            ) AS UNSIGNED
-        )
-    ";
-
-    $builder->where("$cameraField >=", $cameraValue, false);
-}
+  if (!empty($storage)) {
+    $storageField = "CAST(REGEXP_REPLACE(mobile_details.storage, '[^0-9]', '') AS UNSIGNED)";
+    if ($storage == "1024+") {
+        $builder->where("$storageField >=", 1024, false);
+    } else {
+        $builder->where("$storageField =", (int)$storage, false);
+    }
+  }
+  if (!empty($camera)) {
+    $cameraField = "CAST(REGEXP_REPLACE(mobile_details.camera, '[^0-9]', '') AS UNSIGNED)";
+    $builder->where("$cameraField >=", (int)$camera, false);
+  }
   if (!empty($battery)) {
     $batteryField = "CAST(REGEXP_REPLACE(mobile_details.battery, '[^0-9]', '') AS UNSIGNED)";
     $builder->where("$batteryField >=", (int)$battery, false);
@@ -330,14 +324,9 @@ if (!empty($storage)) {
         ->like('laptop_details.graphics_card', $graphicsCard)
     ->groupEnd();
   }
- if (!empty($screenSize)) {
-
-    $builder->where(
-        "laptop_details.screen_size REGEXP '(^| ){$screenSize}-inch'",
-        null,
-        false
-    );
-}
+    if (!empty($screenSize)) {
+    $builder->where('laptop_details.screen_size', $screenSize);
+  }
     if (!empty($price)) {
         $builder->where('products.price <=', $price);
     }
@@ -432,7 +421,8 @@ public function updateProduct($id)
             "camera" => $this->request->getPost('camera'),
             "battery" => $this->request->getPost('battery'),
             "charger" => $this->request->getPost('charger'),
-            "brand" => $this->request->getPost('brand'),];
+            "brand" => $this->request->getPost('brand'),
+        ];
 
         $existing = $mobileModel->where('product_id', $id)->first();
         if ($existing) {
@@ -451,8 +441,8 @@ public function updateProduct($id)
             "charger" => $this->request->getPost('charger'),
             "graphics_card" => $this->request->getPost('graphics_card'),
             "screen_size" => $this->request->getPost('screen_size'),
-            "brand" => $this->request->getPost('brand'),];
-
+            "brand" => $this->request->getPost('brand'),
+        ];
         $existing = $laptopModel->where('product_id', $id)->first();
 
         if ($existing) {
@@ -469,7 +459,8 @@ public function updateProduct($id)
             "type" => $this->request->getPost('type'),
             "power" => $this->request->getPost('power'),
             "warranty" => $this->request->getPost('warranty'),
-            "brand" => $this->request->getPost('brand'),];
+            "brand" => $this->request->getPost('brand'),
+        ];
 
         $existing = $electronicsModel->where('product_id', $id)->first();
 
@@ -481,7 +472,8 @@ public function updateProduct($id)
     }
     return $this->response->setJSON([
         "status" => true,
-        "message" => "Product Updated Successfully"]);
+        "message" => "Product Updated Successfully"
+    ]);
 }
 // delete product by id
 public function deleteProduct($id)
@@ -490,13 +482,14 @@ public function deleteProduct($id)
     $mobileModel = new MobileModel();
     $laptopModel = new LaptopModel();  
     $electronicsModel = new ElectronicsModel();
-    // checking category
+    
     $product = $productModel->find($id);
 
     if (!$product) {
         return $this->response->setJSON([
             "status" => false,
-            "message" => "Product not found"]);
+            "message" => "Product not found"
+        ]);
     }
 
     $category = $product['category'];
@@ -515,11 +508,12 @@ public function deleteProduct($id)
 
     return $this->response->setJSON([
         "status" => true,
-        "message" => "Product Deleted Successfully"]);
+        "message" => "Product Deleted Successfully"
+    ]);
 }
-
 // getting all users
  public function users(){
+
             $userModel = new UserModel();
             $user = $userModel->findAll();
             return $this->response->setJSON($user);
@@ -534,7 +528,7 @@ public function deleteProduct($id)
                     "status"=>false,
                     "message"=>"No data received"]);
             }
-/* Update query */
+
             $db->query("UPDATE login_details SET 
                         name='".$data['name']."',
                         email='".$data['email']."',
@@ -543,7 +537,7 @@ public function deleteProduct($id)
                         role='".$data['role']."',
                         gender='".$data['gender']."'
                         WHERE id='".$id."'");
-/* response */
+
             return $this->response->setJSON([
                    "status"=>true,
                    "message"=>"User Updated Successfully"]);
@@ -557,9 +551,8 @@ public function deleteProduct($id)
                        "status"=>true,
                        "message"=>"User Deleted"]);
           }
-
     //    =======================================
-public function userList(){
+    public function userList(){
 
     $model = new UserModel();
 
@@ -634,8 +627,10 @@ public function productfilter()
     $offset = ($page - 1) * $limit;
 
     $builder = $db->table('products');
+
     // JOIN ALL TABLES
-    $builder->select("products.*,
+    $builder->select("
+        products.*,
 
         mobile_details.brand AS mobile_brand,
         laptop_details.brand AS laptop_brand,
@@ -644,6 +639,7 @@ public function productfilter()
     $builder->join('mobile_details', 'mobile_details.product_id = products.id', 'left');
     $builder->join('laptop_details', 'laptop_details.product_id = products.id', 'left');
     $builder->join('electronics_details', 'electronics_details.product_id = products.id', 'left');
+
     // SEARCH
     if (!empty($search)) {
         sleep(1);
@@ -676,7 +672,8 @@ public function productfilter()
         "data" => $products,
         "total" => $total,
         "page" => (int)$page,
-        "totalPages" => ceil($total / $limit)]);
+        "totalPages" => ceil($total / $limit)
+    ]);
 }
 
 public function addToCart(){
@@ -695,13 +692,15 @@ public function addToCart(){
 
         return $this->response->setJSON([
             "status" => true,
-            "message" => "Quantity updated in cart 🛒"]);
+            "message" => "Quantity updated in cart 🛒"
+        ]);
     } else {
         $db->query("INSERT INTO cart(user_id, product_id, quantity) VALUES('$user_id','$product_id',1)");
 
         return $this->response->setJSON([
             "status" => true,
-            "message" => "Product added to cart 🛒"]);
+            "message" => "Product added to cart 🛒"
+        ]);
     }}
 
 public function getCart($user_id)
@@ -718,8 +717,8 @@ public function getCart($user_id)
             products.image
         FROM cart
         JOIN products ON products.id = cart.product_id
-        WHERE cart.user_id = ?", 
-        [$user_id]);
+        WHERE cart.user_id = ?
+    ", [$user_id]);
     return $this->response->setJSON($query->getResult());
 }
 
@@ -746,7 +745,8 @@ public function removeCart()
     $db->query("DELETE FROM cart WHERE id='$cart_id'");
 
     return $this->response->setJSON([
-        "status" => true]);
+        "status" => true
+    ]);
 }
 
 public function placeOrder()
@@ -763,12 +763,14 @@ public function placeOrder()
     if (!$user_id || !$address || !$phone) {
         return $this->response->setJSON([
             "status" => false,
-            "message" => "Missing required fields"]);
+            "message" => "Missing required fields"
+        ]);
     }
 
     $db->transStart();
 
     try {
+
         // BUY NOW OR CART ITEMS
         if (!empty($products)) {
 
@@ -778,23 +780,26 @@ public function placeOrder()
                 $cartItems[] = (object)[
                     "product_id" => $p['product_id'],
                     "quantity"   => $p['quantity'],
-                    "price"      => $p['price'] ];}
+                    "price"      => $p['price']
+                ];}
         } else {
 
             $cartQuery = $db->query("
                 SELECT cart.product_id, cart.quantity, products.price
                 FROM cart
                 JOIN products ON products.id = cart.product_id
-                WHERE cart.user_id = ?",
-                [$user_id]);
+                WHERE cart.user_id = ?
+            ", [$user_id]);
 
             $cartItems = $cartQuery->getResult();
         }
+
         // EMPTY CHECK
         if (empty($cartItems)) {
             return $this->response->setJSON([
                 "status" => false,
-                "message" => "No products found"]);
+                "message" => "No products found"
+            ]);
         }
         // TOTAL CALCULATION
         $total = 0;
@@ -818,7 +823,8 @@ public function placeOrder()
                 $order_id,
                 $item->product_id,
                 $item->quantity,
-                $item->price ]);
+                $item->price
+            ]);
         }
 
         // CLEAR CART ONLY IF CART FLOW
@@ -843,15 +849,16 @@ $db->query("DELETE FROM cart WHERE user_id = ?", [$user_id]);
         return $this->response->setJSON([
             "status" => false,
             "message" => "Order failed",
-            "error" => $e->getMessage() ]);
+            "error" => $e->getMessage()
+        ]);
     }
 }
 
 public function getOrders($user_id)
 {
     $db = \Config\Database::connect();
-    $orders = $db->query("SELECT * FROM orders WHERE user_id = '$user_id' ORDER BY id DESC")
-    ->getResult();
+    $orders = $db->query("SELECT * FROM orders WHERE user_id = '$user_id' ORDER BY id DESC")->getResult();
+
     return $this->response->setJSON($orders);
 }
 
@@ -864,10 +871,14 @@ public function orderList()
     $sort   = $this->request->getGet('sort');
     $page   = $this->request->getGet('page') ?? 1;
 
+    // ✅ NEW
+    $role      = $this->request->getGet('role');
+    $store_id  = $this->request->getGet('store_id');
+
     $limit = 10;
     $offset = ($page - 1) * $limit;
 
-    //  GET ONLY ORDERS
+    // STEP 1: GET ONLY ORDERS
     $builder = $db->table('orders');
 
     $builder->select("
@@ -878,7 +889,7 @@ public function orderList()
         orders.payment_method,
         orders.payment_status,
         orders.order_status,
-        login_details.name AS user_name ");
+        login_details.name AS user_name");
 
     $builder->join('login_details', 'login_details.id = orders.user_id', 'left');
 
@@ -906,35 +917,71 @@ public function orderList()
     // COUNT
     $countBuilder = clone $builder;
     $total = $countBuilder->countAllResults();
+
     // PAGINATION
     $orders = $builder->get($limit, $offset)->getResult();
 
     // ATTACH PRODUCTS
     foreach ($orders as &$order) {
 
-        $items = $db->query("
-            SELECT 
-                products.name AS product_name,
-                order_items.quantity,
-                order_items.price
-            FROM order_items
-            LEFT JOIN products ON products.id = order_items.product_id
-            WHERE order_items.order_id = ?", 
-            [$order->order_id])->getResult();
+        // ✅ STORE OWNER FILTER
+        if ($role == "Store Owner") {
 
-        // If no items present display the empty array
+            $items = $db->query("
+                SELECT 
+                    products.name AS product_name,
+                    products.store_id,
+                    products.store_name,
+                    order_items.quantity,
+                    order_items.price
+                FROM order_items
+                LEFT JOIN products 
+                    ON products.id = order_items.product_id
+                WHERE order_items.order_id = ?
+                AND products.store_id = ?
+            ", [$order->order_id, $store_id])->getResult();
+
+        } else {
+
+            // ✅ ADMIN ALL PRODUCTS
+            $items = $db->query("
+                SELECT 
+                    products.name AS product_name,
+                    products.store_id,
+                    products.store_name,
+                    order_items.quantity,
+                    order_items.price
+                FROM order_items
+                LEFT JOIN products 
+                    ON products.id = order_items.product_id
+                WHERE order_items.order_id = ?
+            ", [$order->order_id])->getResult();
+        }
+
+        // If no items exist
         $order->items = $items ?: [];
+
         // OPTIONAL: compute total quantity
         $order->total_qty = array_sum(array_map(fn($i) => $i->quantity, $items));
+    }
+
+    // ✅ REMOVE EMPTY ORDERS FOR STORE OWNER
+    if ($role == "Store Owner") {
+
+        $orders = array_filter($orders, function ($order) {
+            return !empty($order->items);
+        });
+
+        $orders = array_values($orders);
     }
 
     return $this->response->setJSON([
         "data" => $orders,
         "total" => $total,
         "page" => (int)$page,
-        "totalPages" => ceil($total / $limit)]);
+        "totalPages" => ceil($total / $limit)
+    ]);
 }
-
 public function getPendingOrders($user_id)
 {
     $db = \Config\Database::connect();
@@ -957,8 +1004,8 @@ public function getPendingOrders($user_id)
         WHERE orders.user_id = ?
         AND orders.payment_status = 'Pending'
 
-        ORDER BY orders.id DESC", 
-        [$user_id]);
+        ORDER BY orders.id DESC
+    ", [$user_id]);
 
     return $this->response->setJSON($query->getResult());
 }
@@ -980,13 +1027,14 @@ public function payOrder()
             SELECT oi.product_id, oi.quantity, p.stock, p.name
             FROM order_items oi
             JOIN products p ON p.id = oi.product_id
-            WHERE oi.order_id = ?", 
-            [$order_id])->getResult();
+            WHERE oi.order_id = ?
+        ", [$order_id])->getResult();
 
         if (empty($items)) {
             return $this->response->setJSON([
                 "status" => false,
-                "message" => "No items found"]);
+                "message" => "No items found"
+            ]);
         }
 
         $order = $db->query("SELECT payment_status FROM orders WHERE id = ?", [$order_id])->getRow();
@@ -994,8 +1042,10 @@ public function payOrder()
 if ($order->payment_status === "Completed") {
     return $this->response->setJSON([
         "status" => false,
-        "message" => "Order already paid"]);
+        "message" => "Order already paid"
+    ]);
 }
+
         // CHECK STOCK
         foreach ($items as $item) {
             if ($item->stock < $item->quantity) {
@@ -1050,12 +1100,11 @@ public function getOrderItems($order_id)
             products.stock
         FROM order_items
         JOIN products ON products.id = order_items.product_id
-        WHERE order_items.order_id = ?",
-        [$order_id]);
+        WHERE order_items.order_id = ?
+    ", [$order_id]);
 
     return $this->response->setJSON($query->getResult());
 }
-
 public function cancelOrder()
 {
     $db = \Config\Database::connect();
@@ -1092,9 +1141,21 @@ public function cancelOrder()
         return $this->response->setJSON([
             "status" => false,
             "message" => "Cancel failed",
-            "error" => $e->getMessage()]);
+            "error" => $e->getMessage()
+        ]);
     }
-  }
+}
+public function storeProducts($store_id)
+{
+    $productModel = new ProductModel();
 
+    $products = $productModel
+        ->where('store_id', $store_id)
+        ->findAll();
 
-  }
+    return $this->response->setJSON([
+        "status" => true,
+        "data" => $products
+    ]);
+}
+      }

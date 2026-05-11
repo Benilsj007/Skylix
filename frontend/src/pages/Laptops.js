@@ -37,8 +37,7 @@ function Laptop() {
           graphicsCard: setGraphicsCard || undefined,
           screenSize: screenSize || undefined,
           search: search || undefined,
-        },
-      })
+        },})
       .then((res) => setProducts(res.data.data))
       .catch((err) => console.log(err));
   }, [brand, price, sort, processor, ram, storage, charger, graphicsCard, screenSize, search]);
@@ -48,9 +47,9 @@ function Laptop() {
        <button className="back" onClick={() => navigate(-1)}>
         <img src="/Images/back.png"/>
                   {/* ⬅️ Go Back */}
-          </button>
-      <div className="row">
+       </button>
 
+      <div className="row">
        <div className="filter col-lg-2 col-md-3 col-sm-12">
             <button className="filter-btn d-md-none"
                     onClick={() => setShowFilters(!showFilters)}>
@@ -106,7 +105,7 @@ function Laptop() {
                ALL
            </p>
          </div>
-          <hr />
+       <hr/>
 
           <div>
           <h6>Processor</h6>
@@ -127,7 +126,7 @@ function Laptop() {
              All
           </p>
       </div>
-<hr />
+   <hr/>
 
       <div>
           <h6>RAM</h6>
@@ -144,7 +143,7 @@ function Laptop() {
           <p className={ram === "" ? "active-filter" : ""}
              onClick={() =>{setRam(""); setShowFilters(false);}}>All</p>
     </div>
-<hr/>
+ <hr/>
 
      <div>
          <h6>Storage</h6>
@@ -157,7 +156,7 @@ function Laptop() {
          <p className={storage === "" ? "active-filter" : ""}
             onClick={() =>{setStorage(""); setShowFilters(false);}}>All</p>
     </div>
-<hr/>
+  <hr/>
       
       <div>
       <h6>Charger</h6>
@@ -170,7 +169,7 @@ function Laptop() {
       <p className={charger === "" ? "active-filter" : ""}
          onClick={() =>{setCharger(""); setShowFilters(false);}}>All</p>
     </div>
-<hr />
+  <hr/>
 
     <div>
     <h6>Screen Size</h6>
@@ -187,18 +186,14 @@ function Laptop() {
        16 Inch
     </p>
     <p className={screenSize === "18" ? "active-filter" : ""}
-    onClick={() => {
-      setScreenSize("18");
-      setShowFilters(false);
-    }}
-  >
+       onClick={() => { setScreenSize("18"); setShowFilters(false); }}>
     18 Inch </p>
     <p className={screenSize === "" ? "active-filter" : ""}
        onClick={() => { setScreenSize(""); setShowFilters(false); }}>
        All
     </p>
   </div>
-<hr />
+<hr/>
       
           <div>
             <h6>Price</h6>
@@ -209,7 +204,7 @@ function Laptop() {
             <p className={price === 100000 ? "active-filter" : ""}
                onClick={() =>{setPrice(100000);setShowFilters(false);}}>
                Below ₹100,000
-            </p>
+            </p> 
             <p className={price === 150000 ? "active-filter" : ""}
                onClick={() =>{setPrice(150000);setShowFilters(false);}}>
                Below ₹150,000
@@ -223,7 +218,7 @@ function Laptop() {
                ALL
             </p>
           </div>
-  <hr />
+       <hr/>
           
           <div>
             <h6>Sort</h6>
@@ -274,9 +269,7 @@ function Laptop() {
     )}
   </div>
 </div>
-      </div>
-    </div>
-  );
-}
-
+</div>
+</div>
+);}
 export default Laptop;

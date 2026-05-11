@@ -47,7 +47,6 @@ const showToast = (msg) => {
     setToast("");
   }, 3000); // auto hide after 3 sec
 };
-
   // FETCH PRODUCT 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -55,8 +54,7 @@ const showToast = (msg) => {
         const productId = location.state?.product?.product_id || location.state?.product?.id;
 
         const res = await axios.get(
-          `http://localhost:8080/get-product/${productId}`
-        );
+          `http://localhost:8080/get-product/${productId}`);
 
         const p = res.data;
 
@@ -84,8 +82,7 @@ const showToast = (msg) => {
         setWarranty(p.warranty || "");
       } catch (err) {
         console.log("Fetch Error:", err);
-      }
-    };
+    }};
 
     fetchProduct();
   }, [location.state]);
@@ -93,6 +90,21 @@ const showToast = (msg) => {
   // UPDATE PRODUCT 
   const handleUpdate = async () => {
     try {
+         const user = JSON.parse(localStorage.getItem("user"));
+
+// admin product = store_id is null/empty
+const isAdminProduct = !editProduct?.store_id;
+
+// store product
+const isStoreProduct = !!editProduct?.store_id;
+
+// FINAL ACCESS RULE
+const canEdit =
+  (user?.role === "admin" && isAdminProduct) ||
+  (user?.role === "store" &&
+    editProduct?.store_id === user?.user_id);
+          
+
       const formData = new FormData();
 
       formData.append("name", name);
@@ -101,6 +113,9 @@ const showToast = (msg) => {
       formData.append("description", description);
       formData.append("stock", stock);
       formData.append("brand", brand);
+
+      formData.append("store_id", user.user_id);
+    formData.append("store_name", user.name);
 
       if (image instanceof File) {
         formData.append("image", image);
@@ -160,17 +175,37 @@ const showToast = (msg) => {
       }
 
       showToast(res?.data?.message || "Updated Successfully ✅");
-      navigate("/admin/products");
+      // navigate("/admin/products");
+      setName("");
+setCategory("");
+setPrice("");
+setDescription("");
+setStock("");
+setBrand("");
+
+setProcessor("");
+setRam("");
+setStorage("");
+setCamera("");
+setBattery("");
+setCharger("");
+setGraphics("");
+setScreenSize("");
+
+setType("");
+setPower("");
+setWarranty("");
+
+setImage(null);
 
     } catch (err) {
       console.log("Update Error:", err);
       showToast(err?.response?.data?.message || "Update Failed ❌");
     }
   };
-
   // Loading 
     if (!editProduct) {
-  return (
+  return (       
     <div className="game-loader">
       <div className="spinner-ring"></div>
       <p>Loading...</p>
@@ -185,6 +220,12 @@ const showToast = (msg) => {
          {toast}
     </div>)}
       <div className="card p-4 edit-product-card">
+        <button
+  className="btn btn-secondary mt-3 me-2"
+  onClick={() => navigate(-1)}
+>
+  ⬅ Back
+</button>
         <h4>Edit Product</h4>
       
         <span className="fw-bold text-muted mt-4">Edit Name</span>
@@ -213,8 +254,7 @@ const showToast = (msg) => {
         <input className="form-control mt-2"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          placeholder="Price"
-        />
+          placeholder="Price"/>
 
         <span className="fw-bold text-muted mt-4">Edit Description</span>
         <input className="form-control mt-2"
@@ -322,7 +362,6 @@ const showToast = (msg) => {
             <input className="form-control mt-2" value={warranty}
               onChange={(e) => setWarranty(e.target.value)}
               placeholder="Warranty"/>
-           
           </>
         )}
 

@@ -19,7 +19,9 @@ class ProductModel extends Model
         'description',
         'image',
         'category',
-        'stock'
+        'stock',
+        'store_id',
+        'store_name'
 ];
 }
 ?>

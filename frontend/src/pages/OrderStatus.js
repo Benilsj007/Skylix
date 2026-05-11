@@ -10,10 +10,15 @@ function OrderStatus() {
   const [sort, setSort] = useState("");
   const [page, setPage] = useState(1);
 
+  // ✅ user (ONLY ONCE)
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user?.role === "admin";
+  const isStore = user?.role === "store";
+
   useEffect(() => {
     const delay = setTimeout(() => {
       fetchOrders();
-    }, 1000); 
+    }, 1000);
 
     return () => clearTimeout(delay);
   }, [search, type, sort, page]);
@@ -21,10 +26,27 @@ function OrderStatus() {
   const fetchOrders = async () => {
     try {
       const res = await axios.get("http://localhost:8080/orderList", {
-        params: { search, type, sort, page },
+        params: {
+          search,
+          type,
+          sort,
+          page,
+          role: user?.role,
+          store_id: user?.user_id
+        },
       });
 
-      setOrders(res.data.data);
+      // ✅ FIX: define data properly
+      let data = res.data.data;
+
+      // ⚠️ OPTIONAL FRONTEND FILTER (not required if backend works)
+      if (isStore) {
+        data = data.filter((order) =>
+          order.items?.some((item) => item.store_id === user.user_id)
+        );
+      }
+
+      setOrders(data);
     } catch (err) {
       console.error("Error fetching orders", err);
     }
@@ -89,7 +111,6 @@ function OrderStatus() {
               <tr>
                 <th>ID</th>
 
-                {/* SORT NAME */}
                 <th>
                   <span
                     style={{ cursor: "pointer", marginRight: "6px" }}
@@ -108,75 +129,80 @@ function OrderStatus() {
                 <th>Qty</th>
                 <th>Payment</th>
                 <th>Status</th>
+
+                {/* ROLE */}
+                <th>Shop</th>
               </tr>
             </thead>
 
-           <tbody>
-  {orders.length === 0 ? (
-    <tr>
-      <td colSpan="8" className="text-center">
-        No Orders Found
-      </td>
-    </tr>
-  ) : (
-    orders.map((order, i) => (
-      <tr key={i}>
-        <td>{order.order_id}</td>
-        <td>{order.user_name}</td>
-        <td>{order.phone}</td>
+            <tbody>
+              {orders.length === 0 ? (
+                <tr>
+                  <td colSpan="9" className="text-center">
+                    No Orders Found
+                  </td>
+                </tr>
+              ) : (
+                orders.map((order, i) => (
+                  <tr key={i}>
+                    <td>{order.order_id}</td>
+                    <td>{order.user_name}</td>
+                    <td>{order.phone}</td>
 
-        {/* PRODUCTS */}
-        <td>
-          {order.items?.map((item, idx) => (
-            <div key={idx}>
-              {item.product_name}
-            </div>
-          ))}
-        </td>
+                    <td>
+                      {order.items?.map((item, idx) => (
+                        <div key={idx}>{item.product_name}</div>
+                      ))}
+                    </td>
 
-        {/* PRICE */}
-        <td>
-          {order.items?.map((item, idx) => (
-            <div key={idx}>
-              ₹{item.price}
-            </div>
-          ))}
-        </td>
+                    <td>
+                      {order.items?.map((item, idx) => (
+                        <div key={idx}>₹{item.price}</div>
+                      ))}
+                    </td>
 
-        {/* QTY */}
-        <td>
-          {order.items?.map((item, idx) => (
-            <div key={idx}>
-              {item.quantity}
-            </div>
-          ))}
-        </td>
+                    <td>
+                      {order.items?.map((item, idx) => (
+                        <div key={idx}>{item.quantity}</div>
+                      ))}
+                    </td>
 
-        {/* PAYMENT */}
-        <td>
-          <span className="payment-badge">
-            {order.payment_method?.toUpperCase() || "N/A"}
-          </span>
-        </td>
+                    <td>
+                      <span className="payment-badge">
+                        {order.payment_method?.toUpperCase() || "N/A"}
+                      </span>
+                    </td>
 
-        {/* STATUS */}
-        <td>
-          <span
-            className={
-              order.payment_status === "Completed"
-                ? "status paid"
-                : "status pending"
-            }
-          >
-            {order.payment_status === "Completed"
-              ? "Paid"
-              : "Pending"}
-          </span>
-        </td>
-      </tr>
-    ))
-  )}
+                    <td>
+                      <span
+                        className={
+                          order.payment_status === "Completed"
+                            ? "status paid"
+                            : "status pending"
+                        }
+                      >
+                        {order.payment_status === "Completed"
+                          ? "Paid"
+                          : "Pending"}
+                      </span>
+                    </td>
+
+                    <td>
+  {order.items?.map((item, idx) => (
+    <div key={idx}>
+      {item.store_name || "N/A"}
+    </div>
+  ))}
+</td>
+
+                    {/* <td>
+                      {isAdmin ? "Admin" : "Store Admin"}
+                    </td> */}
+                  </tr>
+                ))
+              )}
             </tbody>
+
           </table>
         </div>
 

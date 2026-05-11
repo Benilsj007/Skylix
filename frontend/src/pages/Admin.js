@@ -17,9 +17,7 @@ function AdminDashboard() {
           Home
         </button>
       </nav>
-      {/* MAIN LAYOUT */}
       <div className="layout">
-        {/* SIDEBAR */}
         <div className="side">
           <ul className="sidebar-menu">
             <li
@@ -44,7 +42,6 @@ function AdminDashboard() {
             </li>
           </ul>
         </div>
-        {/* MAIN CONTENT */}
         <div className="main-content">
           <Outlet />
         </div>

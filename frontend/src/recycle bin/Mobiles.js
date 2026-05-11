@@ -234,8 +234,8 @@ function Mobiles() {
        <p className={price === "" ? "active-filter" : ""}
          onClick={() =>{setPrice("");setShowFilters(false);}}>
          ALL
-      </p>
-    </div>
+       </p>
+     </div>
     <hr/>
 
     <div>
@@ -278,7 +278,7 @@ function Mobiles() {
               <p>₹{item.price}</p>
               <span className="stock">
                 {item.stock > 0 ? "In Stock 😁😁" : "Out of Stock 😞😞"}
-                <span className="stock">{item.stock}</span>
+                <span className="stock text-danger fw-bold"><strong>{item.stock}</strong></span>
               </span> <br/>
               <small>{item.mobile_ram}</small>
               <small>{item.mobile_processor}</small>
@@ -290,11 +290,10 @@ function Mobiles() {
     ) : (
       <h5 className="text-center mt-5">No products found</h5>
     )}
+   </div>
   </div>
+ </div>
 </div>
-      </div>
-    </div>
-  );
-}
+);}
 
 export default Mobiles;

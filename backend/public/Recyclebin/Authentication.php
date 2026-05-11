@@ -871,6 +871,10 @@ public function orderList()
     $sort   = $this->request->getGet('sort');
     $page   = $this->request->getGet('page') ?? 1;
 
+    // ✅ NEW
+    $role      = $this->request->getGet('role');
+    $store_id  = $this->request->getGet('store_id');
+
     $limit = 10;
     $offset = ($page - 1) * $limit;
 
@@ -913,27 +917,62 @@ public function orderList()
     // COUNT
     $countBuilder = clone $builder;
     $total = $countBuilder->countAllResults();
+
     // PAGINATION
     $orders = $builder->get($limit, $offset)->getResult();
 
     // ATTACH PRODUCTS
     foreach ($orders as &$order) {
 
-        $items = $db->query("
-            SELECT 
-                products.name AS product_name,
-                order_items.quantity,
-                order_items.price
-            FROM order_items
-            LEFT JOIN products ON products.id = order_items.product_id
-            WHERE order_items.order_id = ?
-        ", [$order->order_id])->getResult();
+        // ✅ STORE OWNER FILTER
+        if ($role == "Store Owner") {
+
+            $items = $db->query("
+                SELECT 
+                    products.name AS product_name,
+                    products.store_id,
+                    products.store_name,
+                    order_items.quantity,
+                    order_items.price
+                FROM order_items
+                LEFT JOIN products 
+                    ON products.id = order_items.product_id
+                WHERE order_items.order_id = ?
+                AND products.store_id = ?
+            ", [$order->order_id, $store_id])->getResult();
+
+        } else {
+
+            // ✅ ADMIN ALL PRODUCTS
+            $items = $db->query("
+                SELECT 
+                    products.name AS product_name,
+                    products.store_id,
+                    products.store_name,
+                    order_items.quantity,
+                    order_items.price
+                FROM order_items
+                LEFT JOIN products 
+                    ON products.id = order_items.product_id
+                WHERE order_items.order_id = ?
+            ", [$order->order_id])->getResult();
+        }
 
         // If no items exist
         $order->items = $items ?: [];
 
         // OPTIONAL: compute total quantity
         $order->total_qty = array_sum(array_map(fn($i) => $i->quantity, $items));
+    }
+
+    // ✅ REMOVE EMPTY ORDERS FOR STORE OWNER
+    if ($role == "Store Owner") {
+
+        $orders = array_filter($orders, function ($order) {
+            return !empty($order->items);
+        });
+
+        $orders = array_values($orders);
     }
 
     return $this->response->setJSON([
@@ -943,7 +982,6 @@ public function orderList()
         "totalPages" => ceil($total / $limit)
     ]);
 }
-
 public function getPendingOrders($user_id)
 {
     $db = \Config\Database::connect();
@@ -1106,5 +1144,18 @@ public function cancelOrder()
             "error" => $e->getMessage()
         ]);
     }
+}
+public function storeProducts($store_id)
+{
+    $productModel = new ProductModel();
+
+    $products = $productModel
+        ->where('store_id', $store_id)
+        ->findAll();
+
+    return $this->response->setJSON([
+        "status" => true,
+        "data" => $products
+    ]);
 }
       }

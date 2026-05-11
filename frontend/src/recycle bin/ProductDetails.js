@@ -105,8 +105,7 @@ const buyNow = () => {
           <div className="image-preview">
             <img
               src={`http://localhost:8080/uploads/${selectedImage}`}
-              alt="product"
-            />
+              alt="product"/>
           </div>
 
           <div className="thumbnail-row">
@@ -156,32 +155,52 @@ const buyNow = () => {
 
             {product.processor && (
               <p>
-                <span>Processor</span> {product.processor}
+                <span>Processor</span> <span className="ms-4 text-black">{product.processor}</span>  
               </p>
             )}
             {product.ram && (
               <p>
-                <span>RAM</span> {product.ram}
+                <span>RAM</span> <span className="ms-4 text-black">{product.ram}</span>  
               </p>
             )}
             {product.storage && (
               <p>
-                <span>Storage</span> {product.storage}
+                <span>Storage</span> <span className="ms-4 text-black">{product.storage}</span>  
               </p>
             )}
             {product.camera && (
               <p>
-                <span>Camera</span> {product.camera}
+                <span>Camera</span> <span className="ms-4 text-black">{product.camera}</span>  
               </p>
             )}
             {product.battery && (
               <p>
-                <span>Battery</span> {product.battery}
+                <span>Battery</span> <span className="ms-4 text-black">{product.battery}</span>  
               </p>
             )}
             {product.screen_size && (
               <p>
-                <span>Display</span> {product.screen_size}
+                <span>Display</span> <span className="ms-4 text-black">{product.screen_size}</span>  
+              </p>
+            )}
+             {product.type && (
+              <p>
+                <span>Type</span> <span className="ms-4 text-black">{product.type}</span>  
+              </p>
+            )}
+            {product.power && (
+              <p>
+                <span>Power</span> <span className="ms-4 text-black">{product.power}</span>  
+              </p>
+            )}
+            {product.description && (
+              <p>
+                <span>Description</span> <span className="ms-4 text-black"> {product.description}</span> 
+              </p>
+            )}
+             {product.warranty && (
+              <p>
+                <span>Warranty</span> <span className="ms-4 text-black">{product.warranty}</span>  
               </p>
             )}
           </div>

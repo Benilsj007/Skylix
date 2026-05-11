@@ -22,7 +22,7 @@ const [toast, setToast] = useState("");
   setTimeout(() => {
     setToast("");
   }, 3000); // auto hide after 3 sec
-};
+};  
 
   // LOAD BUY NOW / CART
 useEffect(() => {
@@ -47,7 +47,6 @@ useEffect(() => {
     setTotal(0);
   }
 }, [buyNowProduct]);
-
   // taking data from cart
   const fetchCart = async () => {
     try {
@@ -103,8 +102,7 @@ useEffect(() => {
         price: Number(buyNowProduct.price),
         quantity: Number(buyNowProduct.quantity || 1),
       },
-    ];
-  }
+    ];}
 
   // CART FLOW
   else {
@@ -117,7 +115,7 @@ useEffect(() => {
   }
 console.log("BUY NOW PRODUCT:", buyNowProduct);
 console.log("FINAL PRODUCTS:", products);
-  console.log("FINAL PRODUCTS SENT:", products);
+console.log("FINAL PRODUCTS SENT:", products);
 
   try {
     const payload = {

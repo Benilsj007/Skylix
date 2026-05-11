@@ -30,7 +30,7 @@ function Home() {
       }
     }, 300);
   
-    return () => clearTimeout(delay);
+     return () => clearTimeout(delay);
   }, [search]);
 
   const handleSearchNavigation = (value) => {
@@ -159,7 +159,6 @@ function Home() {
         Pending
       </button>
     </div>
-
   </div>
 </nav>
       {/* CATEGORY NAVBAR */}

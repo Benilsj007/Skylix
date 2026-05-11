@@ -89,9 +89,13 @@ function Laptop() {
                onClick={() =>{setBrand("DELL");setShowFilters(false);}}>
                DELL
            </p>
-           <p className={brand === "MAC" ? "active-filter" : ""}
-               onClick={() =>{setBrand("MAC");setShowFilters(false);}}>
-               MAC
+           <p className={brand === "Apple" ? "active-filter" : ""}
+               onClick={() =>{setBrand("Apple");setShowFilters(false);}}>
+               Apple
+           </p>
+           <p className={brand === "MSI" ? "active-filter" : ""}
+               onClick={() =>{setBrand("MSI");setShowFilters(false);}}>
+               MSI
            </p>
            <p className={brand === "Samsung" ? "active-filter" : ""}
                onClick={() =>{setBrand("Samsung");setShowFilters(false);}}>
@@ -144,16 +148,12 @@ function Laptop() {
 
      <div>
          <h6>Storage</h6>
-         <p className={storage === 32 ? "active-filter" : ""}
-            onClick={() =>{setStorage(32); setShowFilters(false);}}>32GB</p>
-         <p className={storage === 64 ? "active-filter" : ""}
-            onClick={() =>{setStorage(64); setShowFilters(false);}}>64GB</p>
-         <p className={storage === 128 ? "active-filter" : ""}
-            onClick={() =>{setStorage(128); setShowFilters(false);}}>128GB</p>
-         <p className={storage === 256 ? "active-filter" : ""}
-            onClick={() =>{setStorage(256); setShowFilters(false);}}>256GB</p>
          <p className={storage === 512 ? "active-filter" : ""}
             onClick={() =>{setStorage(512); setShowFilters(false);}}>512GB</p>
+         <p className={storage === "1TB" ? "active-filter" : ""}
+            onClick={() =>{setStorage("1TB"); setShowFilters(false);}}>1TB</p>
+         <p className={storage === "2TB" ? "active-filter" : ""}
+            onClick={() =>{setStorage("2TB"); setShowFilters(false);}}>2TB</p>
          <p className={storage === "" ? "active-filter" : ""}
             onClick={() =>{setStorage(""); setShowFilters(false);}}>All</p>
     </div>
@@ -174,21 +174,32 @@ function Laptop() {
 
     <div>
     <h6>Screen Size</h6>
-    <p className={screenSize === "1000x1000" ? "active-filter" : ""}
-       onClick={() => { setScreenSize("1000x1000"); setShowFilters(false); }}>
-       1000 x 1000
+    <p className={screenSize === "13.6" ? "active-filter" : ""}
+       onClick={() => { setScreenSize("13.6"); setShowFilters(false); }}>
+       13.6 Inch
     </p>
-    <p className={screenSize === "1800x1800" ? "active-filter" : ""}
-       onClick={() => { setScreenSize("1800x1800"); setShowFilters(false); }}>
-       1800 x 1800
+    <p className={screenSize === "15.6" ? "active-filter" : ""}
+       onClick={() => { setScreenSize("15.6"); setShowFilters(false); }}>
+       15.6 Inch
     </p>
+    <p className={screenSize === "16" ? "active-filter" : ""}
+       onClick={() => { setScreenSize("16"); setShowFilters(false); }}>
+       16 Inch
+    </p>
+    <p className={screenSize === "18" ? "active-filter" : ""}
+    onClick={() => {
+      setScreenSize("18");
+      setShowFilters(false);
+    }}
+  >
+    18 Inch </p>
     <p className={screenSize === "" ? "active-filter" : ""}
        onClick={() => { setScreenSize(""); setShowFilters(false); }}>
        All
     </p>
   </div>
 <hr />
-       
+      
           <div>
             <h6>Price</h6>
             <p className={price === 50000 ? "active-filter" : ""}

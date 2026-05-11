@@ -24,6 +24,9 @@ import Payment from "./pages/Payment";
 import PendingPayments from "./pages/PendingPayments";
 import ScrollToTop from "./pages/ScrollToTop";
 
+import StoreProducts from "./pages/Store Admin/StoreProducts";
+import StoreDashboard from "./pages/Store Admin/StoreDashboard";
+
 // import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
@@ -68,8 +71,45 @@ function App() {
           <Route path="pendingpayment" element={<PendingPayments />} />
        </Route>
 
+       {/* <Route
+   path="/store/products"
+   element={<StoreProducts />}
+/> */}
+
+<Route path="/store" element={<StoreDashboard />}>
+
+    {/* <Route
+        path="dashboard"
+        element={<StoreHome />}
+    /> */}
+
+    <Route
+        path="products"
+        element={<StoreProducts />}
+    />
+
+    <Route
+        path="add-product"
+        element={<AddProduct />}
+    /> 
+
+     <Route
+        path="edit-product"
+        element={<EditProduct/>}
+    /> 
+
+     <Route
+        path="orders"
+        element={<OrderStatus />}
+    /> 
+
+</Route>
+
       </Routes>
+
+      
     </BrowserRouter>
   );
 }
 export default App;
+

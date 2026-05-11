@@ -65,6 +65,22 @@ function Accessories() {
                  onClick={() =>{setBrand("JBL"); setShowFilters(false);}}>
                  JBL
               </p>
+              <p className={brand === "BoAt" ? "active-filter" : ""}
+                 onClick={() =>{setBrand("BoAt"); setShowFilters(false);}}>
+                 BoAt
+              </p>
+              <p className={brand === "Boult" ? "active-filter" : ""}
+                 onClick={() =>{setBrand("Boult"); setShowFilters(false);}}>
+                 Boult
+              </p>
+              <p className={brand === "Mivi" ? "active-filter" : ""}
+                 onClick={() =>{setBrand("Mivi"); setShowFilters(false);}}>
+                 Mivi
+              </p>
+              <p className={brand === "CMF" ? "active-filter" : ""}
+                 onClick={() =>{setBrand("CMF"); setShowFilters(false);}}>
+                 CMF
+              </p>
               <p className={brand === "Samsung" ? "active-filter" : ""}
                  onClick={() =>{setBrand("Samsung"); setShowFilters(false);}}>
                  Samsung

@@ -14,6 +14,7 @@ const [toast, setToast] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+
   // COMMON
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -61,7 +62,15 @@ const [toast, setToast] = useState("");
 
   const addProduct = async () => {
     try {
+           const user = JSON.parse(
+   localStorage.getItem("user")
+);
+
       const formData = new FormData();
+
+      formData.append("store_id", user.user_id);
+
+      formData.append("store_name", user.name);
 
       // COMMON
       formData.append("name", name);
@@ -87,6 +96,7 @@ const [toast, setToast] = useState("");
       formData.append("power", power);
       formData.append("warranty", warranty);
 
+   
       const res = await axios.post("/add-product", formData);
 
       const newProduct = res.data.product;

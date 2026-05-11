@@ -177,27 +177,27 @@ const canEdit =
       showToast(res?.data?.message || "Updated Successfully ✅");
       // navigate("/admin/products");
       setName("");
-setCategory("");
-setPrice("");
-setDescription("");
-setStock("");
-setBrand("");
+      setCategory("");
+      setPrice("");
+      setDescription("");
+      setStock("");
+      setBrand("");
 
-setProcessor("");
-setRam("");
-setStorage("");
-setCamera("");
-setBattery("");
-setCharger("");
-setGraphics("");
-setScreenSize("");
+      setProcessor("");
+      setRam("");
+      setStorage("");
+      setCamera("");
+      setBattery("");
+      setCharger("");
+      setGraphics("");     
+      setScreenSize("");
 
-setType("");
-setPower("");
-setWarranty("");
+      setType("");
+      setPower("");
+      setWarranty("");
 
-setImage(null);
-navigate(-1);
+      setImage(null);
+      navigate(-1);
 
     } catch (err) {
       console.log("Update Error:", err);

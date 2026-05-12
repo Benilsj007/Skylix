@@ -41,14 +41,12 @@ function Register(){
       return;
 }
 
-// NAME VALIDATION (only letters)
    const namePattern = /^[A-Za-z ]+$/;
         if (!namePattern.test(name)) {
         setNameError("Name should contain only letters");
         return;
 }
 
-// EMAIL VALIDATION
    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
          if (!emailPattern.test(email)) {
          setEmailError("Enter valid email");

@@ -89,6 +89,12 @@ useEffect(() => {
           return;
   }
 
+// PHONE VALIDATION (10 digits)
+   const phonePattern = /^[0-9]{10}$/;
+         if (!phonePattern.test(phone)) {
+showToast("Phone Number should be 10 digits📱");         return;
+}
+
   const user_id = localStorage.getItem("user_id");
 
   let products = [];

@@ -142,7 +142,6 @@ public function addProduct()
             "graphics_card" => $this->request->getPost('graphics_card'),
             "screen_size" => $this->request->getPost('screen_size'),
             "brand" => $this->request->getPost('brand')
-
             ]);
     }
 
@@ -519,6 +518,7 @@ public function deleteProduct($id)
             return $this->response->setJSON($user);
             }
 
+
  public function updateUser($id){
             $db = \Config\Database::connect();
             $data = $this->request->getJSON(true);
@@ -528,7 +528,6 @@ public function deleteProduct($id)
                     "status"=>false,
                     "message"=>"No data received"]);
             }
-
             $db->query("UPDATE login_details SET 
                         name='".$data['name']."',
                         email='".$data['email']."',
@@ -542,6 +541,7 @@ public function deleteProduct($id)
                    "status"=>true,
                    "message"=>"User Updated Successfully"]);
         }
+
 /* DELETE USER */
     public function deleteUser($id){
                 $db = \Config\Database::connect();
@@ -551,7 +551,8 @@ public function deleteProduct($id)
                        "status"=>true,
                        "message"=>"User Deleted"]);
           }
-    //    =======================================
+    //    
+
     public function userList(){
 
     $model = new UserModel();
@@ -826,12 +827,6 @@ public function placeOrder()
                 $item->price
             ]);
         }
-
-        // CLEAR CART ONLY IF CART FLOW
-        // if (empty($products)) {
-        //     $db->query("DELETE FROM cart WHERE user_id = ?", [$user_id]);
-        // }
-
         //  ALWAYS CLEAR CART AFTER ORDER
 $db->query("DELETE FROM cart WHERE user_id = ?", [$user_id]);
 

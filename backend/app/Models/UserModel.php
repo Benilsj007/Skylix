@@ -20,6 +20,5 @@ class UserModel extends Model
         'address',
         'gender',
         'password'
-];
-}
+    ];}
 ?>

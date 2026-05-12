@@ -197,14 +197,14 @@ const canEdit =
       setWarranty("");
 
       setImage(null);
-      navigate(-1);
+      navigate(-1); 
 
     } catch (err) {
       console.log("Update Error:", err);
       showToast(err?.response?.data?.message || "Update Failed ❌");
     }
   };
-  // Loading 
+  
     if (!editProduct) {
   return (       
     <div className="game-loader">
@@ -261,8 +261,7 @@ const canEdit =
       <span className="fw-bold text-muted mt-4">Edit Image</span>
         {/* SAFE IMAGE */}
        {editProduct?.image ? (
-       <img
-          src={`http://localhost:8080/uploads/${editProduct.image}`}
+       <img src={`http://localhost:8080/uploads/${editProduct.image}`}
           width="100" className="mt-2" alt="product" />) : null}
         
         <input type="file"
@@ -275,7 +274,6 @@ const canEdit =
           onChange={(e) => setStock(e.target.value)}
           placeholder="Stock"/>
 
-        {/* MOBILE */}
         {category === "Mobile" && (
           <>
             <span className="fw-bold text-muted mt-4">Edit Processor</span>
@@ -302,11 +300,8 @@ const canEdit =
              <input className="form-control mt-2" value={battery}
               onChange={(e) => setBattery(e.target.value)}
               placeholder="Battery"/>
-           
           </>
         )}
-
-        {/* LAPTOP */}
         {category === "Laptop" && (
           <>
             <span className="fw-bold text-muted mt-4">Edit Graphics</span>
@@ -341,7 +336,6 @@ const canEdit =
           </>
         )}
 
-        {/* ACCESSORIES */}
         {category === "Accessories" && (
           <>
             <span className="fw-bold text-muted mt-4">Edit Type</span>
@@ -364,12 +358,10 @@ const canEdit =
         <button className="btn btn-success mt-3" onClick={handleUpdate}>
           Update
         </button>
-         <button
-  className="btn btn-secondary mt-3 me-2"
-  onClick={() => navigate(-1)}
->
-  ❌ Cancel
-</button>
+         <button className="btn btn-secondary mt-3 me-2"
+                 onClick={() => navigate(-1)}>
+                 ❌ Cancel
+         </button>
       </div>
     </div>
   );

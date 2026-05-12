@@ -10,7 +10,7 @@ function OrderStatus() {
   const [sort, setSort] = useState("");
   const [page, setPage] = useState(1);
 
-  // ✅ user (ONLY ONCE)
+  //  user (ONLY ONCE)
   const user = JSON.parse(localStorage.getItem("user"));
   const isAdmin = user?.role === "admin";
   const isStore = user?.role === "store";
@@ -36,52 +36,44 @@ function OrderStatus() {
         },
       });
 
-      // ✅ FIX: define data properly
       let data = res.data.data;
 
-      // ⚠️ OPTIONAL FRONTEND FILTER (not required if backend works)
+      // OPTIONAL FRONTEND FILTER 
       if (isStore) {
         data = data.filter((order) =>
           order.items?.some((item) => item.store_id === user.user_id)
-        );
-      }
-
+        );}
       setOrders(data);
     } catch (err) {
       console.error("Error fetching orders", err);
-    }
-  };
+    }};
 
   return (
     <div className="container py-4">
-
       {/* HEADER */}
       <div className="order-header-card">
         <h2>📦 Order Management</h2>
         <p>Search, filter, and track all orders</p>
       </div>
-
       {/* FILTER CARD */}
       <div className="filter-card">
         <h4>🔍 Filter Orders</h4>
 
         <div className="row g-3">
-
           {/* SEARCH TYPE */}
           <div className="col-md-3">
             <label>Search Type</label>
             <select
               className="form-control"
               value={type}
-              onChange={(e) => setType(e.target.value)}
-            >
+              onChange={(e) => setType(e.target.value)}>
+
               <option value="name">Name</option>
               <option value="phone">Phone</option>
               <option value="product">Product</option>
               <option value="status">Status</option>
             </select>
           </div>
-
           {/* SEARCH INPUT */}
           <div className="col-md-5">
             <label>Search</label>
@@ -93,8 +85,7 @@ function OrderStatus() {
               onChange={(e) => {
                 setPage(1);
                 setSearch(e.target.value);
-              }}
-            />
+              }}/>
           </div>
 
         </div>
@@ -110,27 +101,21 @@ function OrderStatus() {
             <thead>
               <tr>
                 <th>ID</th>
-
                 <th>
                   <span
                     style={{ cursor: "pointer", marginRight: "6px" }}
                     onClick={() =>
-                      setSort(sort === "name-asc" ? "name-desc" : "name-asc")
-                    }
-                  >
+                      setSort(sort === "name-asc" ? "name-desc" : "name-asc") }>
                     {sort === "name-asc" ? "▲" : "▼"}
                   </span>
                   User
                 </th>
-
                 <th>Phone</th>
                 <th>Product</th>
                 <th>Price</th>
                 <th>Qty</th>
                 <th>Payment</th>
                 <th>Status</th>
-
-                {/* ROLE */}
                 <th>Shop</th>
               </tr>
             </thead>
@@ -148,61 +133,49 @@ function OrderStatus() {
                     <td>{order.order_id}</td>
                     <td>{order.user_name}</td>
                     <td>{order.phone}</td>
-
                     <td>
                       {order.items?.map((item, idx) => (
                         <div key={idx}>{item.product_name}</div>
                       ))}
                     </td>
-
                     <td>
                       {order.items?.map((item, idx) => (
                         <div key={idx}>₹{item.price}</div>
                       ))}
                     </td>
-
                     <td>
                       {order.items?.map((item, idx) => (
                         <div key={idx}>{item.quantity}</div>
                       ))}
                     </td>
-
                     <td>
                       <span className="payment-badge">
                         {order.payment_method?.toUpperCase() || "N/A"}
                       </span>
                     </td>
-
                     <td>
                       <span
                         className={
                           order.payment_status === "Completed"
                             ? "status paid"
                             : "status pending"
-                        }
-                      >
+                        }>
                         {order.payment_status === "Completed"
                           ? "Paid"
                           : "Pending"}
                       </span>
                     </td>
-
                     <td>
-  {order.items?.map((item, idx) => (
-    <div key={idx}>
-      {item.store_name || "N/A"}
-    </div>
-  ))}
-</td>
-
-                    {/* <td>
-                      {isAdmin ? "Admin" : "Store Admin"}
-                    </td> */}
+                      {order.items?.map((item, idx) => (
+                      <div key={idx}>
+                      {item.store_name || "N/A"}
+                      </div>
+                     ))}
+                  </td>
                   </tr>
                 ))
               )}
             </tbody>
-
           </table>
         </div>
 
@@ -211,21 +184,16 @@ function OrderStatus() {
           <button
             className="btn btn-secondary"
             disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-          >
+            onClick={() => setPage(page - 1)}>
             ⬅ Prev
           </button>
-
           <span className="page-info">Page {page}</span>
-
           <button
             className="btn btn-secondary"
-            onClick={() => setPage(page + 1)}
-          >
+            onClick={() => setPage(page + 1)}>
             Next ➡
           </button>
         </div>
-
       </div>
     </div>
   );

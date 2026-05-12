@@ -71,17 +71,7 @@ function App() {
           <Route path="pendingpayment" element={<PendingPayments />} />
        </Route>
 
-       {/* <Route
-   path="/store/products"
-   element={<StoreProducts />}
-/> */}
-
 <Route path="/store" element={<StoreDashboard />}>
-
-    {/* <Route
-        path="dashboard"
-        element={<StoreHome />}
-    /> */}
 
     <Route
         path="products"

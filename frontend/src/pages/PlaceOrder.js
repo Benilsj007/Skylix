@@ -58,8 +58,7 @@ useEffect(() => {
       }
 
       const res = await axios.get(
-        `http://localhost:8080/get-cart/${user_id}`
-      );
+        `http://localhost:8080/get-cart/${user_id}`);
 
       const data = Array.isArray(res.data) ? res.data : [];
 
@@ -81,20 +80,18 @@ useEffect(() => {
       setCart([]);
       setTotal(0);
     }};
-
   // function for placing order
   const placeOrder = async (payment_method) => {
        if (!address || !phone) {
           showToast("Please fill address and phone 🏡&📱");
           return;
   }
-
 // PHONE VALIDATION (10 digits)
    const phonePattern = /^[0-9]{10}$/;
          if (!phonePattern.test(phone)) {
-showToast("Phone Number should be 10 digits📱");         return;
+          showToast("Phone Number should be 10 digits📱");         
+          return;
 }
-
   const user_id = localStorage.getItem("user_id");
 
   let products = [];
@@ -161,7 +158,6 @@ console.log("FINAL PRODUCTS SENT:", products);
                 {toast}
            </div>
        )}
-
       {/* LEFT */}
       <div className="left">
         <h2>Delivery Details</h2>

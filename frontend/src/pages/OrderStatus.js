@@ -41,7 +41,8 @@ function OrderStatus() {
       // OPTIONAL FRONTEND FILTER 
       if (isStore) {
         data = data.filter((order) =>
-          order.items?.some((item) => item.store_id === user.user_id)
+          order.items?.some((item) =>
+          item.store_id === user.user_id)
         );}
       setOrders(data);
     } catch (err) {

@@ -99,3 +99,14 @@ $routes->post('cancel-order', 'Authentication::cancelOrder');
 
 
 $routes->get('store-products/(:num)', 'Authentication::storeProducts/$1');
+
+
+
+$routes->get('excel/export', 'ExcelController::exportExcel');
+$routes->post('excel/import', 'ExcelController::importExcel');
+
+$routes->post('excel/import-users', 'ExcelController::importUsers');
+$routes->get('excel/export-users', 'ExcelController::exportUsers');
+
+
+$routes->post('upload-product-image/(:num)', 'ExcelController::uploadProductImage/$1');

@@ -158,6 +158,9 @@ public function addProduct()
         ]);
     }
 
+     $sync = new \App\Libraries\ExcelSyncService();
+    $sync->sync(); 
+    
     return $this->response->setJSON([
         "status" => true,
         "message" => "Product Added Successfully"
@@ -613,7 +616,7 @@ public function deleteProduct($id)
         "page" => (int)$page,
         "totalPages" => ceil($total / $limit)
     ]);
-}
+} 
 
 public function productfilter()
 {

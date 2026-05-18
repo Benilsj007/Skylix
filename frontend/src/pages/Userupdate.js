@@ -174,43 +174,33 @@ function Userupdate() {
 
     <div className="container py-4">
 
-      {/* ✅ TOAST CONTAINER */}
       <ToastContainer
         position="top-right"
-        autoClose={2000}
-      />
+        autoClose={2000}/>
 
       <div className="user-header-card">
-
         <h2 className="user-title">👥 User Management</h2>
-
         <p className="user-subtitle">
           Search, filter, sort and manage users easily
         </p>
-
       </div>
-
       <div className="filter-card">
-
         <h4 className="filter-title"> Filter Users</h4>
-
         <div className="row g-3">
-
           <div className="col-lg-4 col-md-6">
 
-            <label className="input-label">🔎 Search</label>
+            <label className="input-label ">🔎 Search</label>
 
             <input
               type="text"
               className="form-control custom-input"
               placeholder="Search by name, email, phone, address"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+              onChange={(e) => setSearchTerm(e.target.value)}/>
 
           </div>
 
-          <div className="col-lg-4 col-md-6">
+          <div className="col-lg-4 col-md-6 ">
 
             <label className="input-label">📍 Place Filter</label>
 
@@ -219,24 +209,27 @@ function Userupdate() {
               className="form-control custom-input"
               placeholder="Enter place"
               value={placeFilter}
-              onChange={(e) => setPlaceFilter(e.target.value)}
-            />
-
+              onChange={(e) => setPlaceFilter(e.target.value)}/>
           </div>
-
         </div>
-
       </div>
 
       {/* IMPORT / EXPORT */}
       <div className="d-flex gap-3 mt-3 mb-3">
 
         <input
-          type="file"
-          accept=".xlsx,.xls"
-          onChange={(e) => setExcelFile(e.target.files[0])}
-          className="form-control w-25"
-        />
+    type="file"
+    accept=".xlsx,.xls"
+    id="excelUpload"
+    className="d-none"
+    onChange={(e) => setExcelFile(e.target.files[0])}
+  />
+
+  <label htmlFor="excelUpload" className="fs-3" title="Click to Upload File"
+  style={{ cursor: "pointer" }}>
+    🗂️
+  </label>
+
 
         <button
           className="btn btn-success"

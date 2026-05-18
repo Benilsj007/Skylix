@@ -184,7 +184,6 @@ class ExcelController extends Controller
             $row[7] = $p['store_id'];
             $row[8] = $p['store_name'];
 
-            // FIX #2: CLEAN CATEGORY MATCH
             $category = strtolower(trim(preg_replace('/\s+/', ' ', $p['category'] ?? '')));
 
             if (stripos($category, "mobile") !== false) {
@@ -331,9 +330,7 @@ class ExcelController extends Controller
                 "phone"    => $row[3] ?? null,
                 "address"  => $row[4] ?? null,
                 "gender"   => $row[5] ?? null,
-
                 "password" => $row[6] ?? '',
-
                 "role"     => $role
             ];
 

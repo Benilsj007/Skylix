@@ -22,9 +22,6 @@ function ProductList() {
 
   const [excelFile, setExcelFile] = useState(null);
 
-  // =========================
-  // SEARCH NAVIGATION (kept your logic)
-  // =========================
   const handleSearch = (value) => {
     navigate(`?search=${value}`);
   };
@@ -33,9 +30,6 @@ function ProductList() {
     navigate(`?edit=${value}`);
   };
 
-  // =========================
-  // FETCH PRODUCTS (FIXED)
-  // =========================
   useEffect(() => {
     const delay = setTimeout(() => {
       axios
@@ -54,9 +48,6 @@ function ProductList() {
     return () => clearTimeout(delay);
   }, [dispatch, searchTerm, categoryFilter, sortOption, page]);
 
-  // =========================
-  // DELETE PRODUCT
-  // =========================
   const handleDelete = async (id) => {
     try {
       await axios.post(`http://localhost:8080/delete-product/${id}`);
@@ -101,9 +92,6 @@ function ProductList() {
   }
 };
 
-  // =========================
-  // EXCEL UPLOAD (TOAST ADDED)
-  // =========================
   const uploadExcel = async (file) => {
     if (!file) {
       toast.error("Please select an Excel file first");
@@ -149,9 +137,6 @@ function ProductList() {
     }
   };
 
-  // =========================
-// SINGLE IMAGE UPLOAD
-// =========================
 const uploadSingleImage = async (productId, file) => {
   try {
     const formData = new FormData();
@@ -242,38 +227,37 @@ const uploadSingleImage = async (productId, file) => {
         </div>
       </div>
 
-      {/* ========================= */}
-      {/* 📥 IMPORT / EXPORT EXCEL */}
-      {/* ========================= */}
       <div className="d-flex gap-3 mt-3 mb-3 align-items-center">
+        <>
+  <input
+    type="file"
+    accept=".xlsx,.xls"
+    id="excelUpload"
+    className="d-none"
+    onChange={(e) => setExcelFile(e.target.files[0])}
+  />
 
-        {/* FILE INPUT */}
-        <input
-          type="file"
-          accept=".xlsx,.xls"
-          className="form-control w-25"
-          onChange={(e) => setExcelFile(e.target.files[0])}
-        />
-
-        {/* IMPORT BUTTON */}
+  <label htmlFor="excelUpload" className="fs-3" title="Click To Upload Files"
+  style={{ cursor: "pointer" }}>
+    🗂️
+  </label>
+</>
         <button
           className="btn btn-success"
           onClick={() => uploadExcel(excelFile)}
         >
-          Import Excel ⬆️
+          Import Excel 📤
         </button>
 
-        {/* EXPORT BUTTON */}
         <button
           className="btn btn-primary"
           onClick={downloadExcel}
         >
-          Export Excel ⬇️
+          Export Excel 📥
         </button>
 
       </div>
 
-      {/* TABLE */}
       <div className="card-body table-responsive">
         <table className="table table-striped align-middle">
           <thead>
@@ -286,12 +270,9 @@ const uploadSingleImage = async (productId, file) => {
                 onClick={() =>
                   setSortOption(
                     sortOption === "name-asc" ? "name-desc" : "name-asc"
-                  )
-                }
-              >
+                  )}>
                 Name {sortOption === "name-asc" ? "▲" : "▼"}
               </th>
-
               <th>Category</th>
               <th>Brand</th>
               <th>Price</th>
@@ -311,16 +292,6 @@ const uploadSingleImage = async (productId, file) => {
                 <td>{p.brand}</td>
                 <td>{p.price}</td>
                 <td>{p.stock}</td>
-
-                {/* <td>
-                  {p.image && (
-                    <img
-                      src={`http://localhost:8080/uploads/${p.image}`}
-                      width="60"
-                      alt={p.name}
-                    />
-                  )}
-                </td> */}
                <td>
                 <div className="d-flex flex-column align-items-center ">
                    {p.image && (
@@ -334,12 +305,10 @@ const uploadSingleImage = async (productId, file) => {
    <label
    title="Click to upload image"
    className="upload-btn"
-    htmlFor={`upload-${p.id}`}
-  >
+    htmlFor={`upload-${p.id}`}>
     ⬆
   </label>
-
-                </div>
+    </div>
   <input
     type="file"
     accept="image/*"
@@ -351,12 +320,9 @@ const uploadSingleImage = async (productId, file) => {
       if (file) {
         uploadSingleImage(p.id, file);
       }
-    }}
-  />
-
- 
+    }}/> 
 </td>
-                <td>
+              <td>
                   <button
                     className="btn btn-warning btn-sm"
                     onClick={() =>
@@ -365,11 +331,8 @@ const uploadSingleImage = async (productId, file) => {
                           product: {
                             id: p.id,
                             category: p.category,
-                          },
-                        },
-                      })
-                    }
-                  >
+                          },},
+                      })}>
                     Edit
                   </button>
 
@@ -377,13 +340,10 @@ const uploadSingleImage = async (productId, file) => {
                     className="btn btn-danger btn-sm"
                     onClick={() => {
                       const confirmDelete = window.confirm(
-                        "Are you sure you want to delete?"
-                      );
+                        "Are you sure you want to delete?"  );
                       if (confirmDelete) {
-                        handleDelete(p.id);
-                      }
-                    }}
-                  >
+                        handleDelete(p.id);}
+                    }}>
                     Delete
                   </button>
                 </td>
@@ -392,7 +352,6 @@ const uploadSingleImage = async (productId, file) => {
           </tbody>
         </table>
 
-        {/* PAGINATION */}
         <div className="pagination-container">
           <button
             className="btn btn-secondary"
@@ -406,8 +365,7 @@ const uploadSingleImage = async (productId, file) => {
 
           <button
             className="btn btn-secondary"
-            onClick={() => setPage(page + 1)}
-          >
+            onClick={() => setPage(page + 1)} >
             Next ➡
           </button>
         </div>

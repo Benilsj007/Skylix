@@ -184,8 +184,7 @@ const uploadSingleImage = async (productId, file) => {
       {/* ADD PRODUCT */}
       <button
         className="btn btn-success mb-3"
-        onClick={() => navigate("/admin/products/add")}
-      >
+        onClick={() => navigate("/admin/products/add")}>
         Add Product
       </button>
 

@@ -96,8 +96,7 @@ $routes->post('pay-order', 'Authentication::payOrder');
 $routes->get('pending-orders/(:num)', 'Authentication::getPendingOrders/$1');
 $routes->post('cancel-order', 'Authentication::cancelOrder');
 
-
-
+$routes->get('store-list', 'Authentication::storeList');
 $routes->get('store-products/(:num)', 'Authentication::storeProducts/$1');
 
 

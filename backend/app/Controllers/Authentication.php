@@ -1156,4 +1156,20 @@ public function storeProducts($store_id)
         "data" => $products
     ]);
 }
+
+public function storeList()
+{
+    $db = \Config\Database::connect();
+
+    $stores = $db->query("
+        SELECT DISTINCT store_id, store_name
+        FROM products
+        WHERE store_id IS NOT NULL
+    ")->getResult();
+
+    return $this->response->setJSON([
+        "status" => true,
+        "data" => $stores
+    ]);
+}
       }

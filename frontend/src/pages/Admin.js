@@ -40,6 +40,11 @@ function AdminDashboard() {
               onClick={() => navigate("/admin/orders")}>
               Order Status
             </li>
+            <li
+              className={location.pathname === "/admin/store-details" ? "active" : ""}
+              onClick={() => navigate("/admin/store-details")}>
+              Store Details
+            </li>
           </ul>
         </div>
         <div className="main-content">

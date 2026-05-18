@@ -29,6 +29,7 @@ import ScrollToTop from "./pages/ScrollToTop";
 
 import StoreProducts from "./pages/Store Admin/StoreProducts";
 import StoreDashboard from "./pages/Store Admin/StoreDashboard";
+import StoreDetails from "./pages/Store Admin/StoreDetails";
 
 // import ProtectedRoute from "./pages/ProtectedRoute";
 
@@ -54,7 +55,7 @@ function App() {
           <Route path="users" element={<Userupdate />} />
           <Route path="users/edit" element={<UserEdit />} />
           <Route path="orders" element={<OrderStatus />} />
-
+          <Route path="store-details" element={<StoreDetails />} />
 
           </Route>
  

@@ -243,15 +243,15 @@ const uploadSingleImage = async (productId, file) => {
 </>
         <button
           className="btn btn-success"
-          onClick={() => uploadExcel(excelFile)}
-        >
+          title="Click to upload File"
+          onClick={() => uploadExcel(excelFile)}>
           Import Excel 📤
         </button>
 
         <button
           className="btn btn-primary"
-          onClick={downloadExcel}
-        >
+          title="Click to download File"
+          onClick={downloadExcel}>
           Export Excel 📥
         </button>
 

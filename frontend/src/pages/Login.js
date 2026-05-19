@@ -54,16 +54,17 @@ const login = async () => {
 
        if(res.data.status){
 
-                  localStorage.setItem(
-   "user",
-   JSON.stringify(res.data)
-);
+localStorage.setItem("user", JSON.stringify({
+    user_id: res.data.user_id,
+    role: res.data.role,
+    name: res.data.name   // ✅ IMPORTANT
+  }));
 
 // check user role
        if(res.data.role === "admin"){
               navigate("/admin");
               }
-              else if(res.data.role === "Store Owner"){
+              else if(res.data.role === "storeowner"){
                      navigate("/store");
               }else{
                    navigate("/home");

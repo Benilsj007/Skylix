@@ -3,11 +3,12 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "../redux/productSlice";
 import { useNavigate, useOutletContext } from "react-router-dom";
-
 /* SWIPER */
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Autoplay } from "swiper/modules";
+import "./CSS/ProductData.css";
+
 
 function ProductData() {
 
@@ -56,7 +57,7 @@ function ProductData() {
       </div>
 
       {/* PRODUCTS */}
-      <div className="products-section gap-4">
+      <div className="products-section">
         {products.length > 0 ? (
           products.map((item) => (
             <div

@@ -98,6 +98,7 @@ $routes->post('cancel-order', 'Authentication::cancelOrder');
 
 $routes->get('store-list', 'Authentication::storeList');
 $routes->get('store-products/(:num)', 'Authentication::storeProducts/$1');
+$routes->post('delete-store-product/(:num)', 'Authentication::deleteStoreProduct/$1');
 
 
 

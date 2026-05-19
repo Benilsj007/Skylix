@@ -44,6 +44,7 @@ public function login(){
             "status" => true,
             "role" => $user->role,
             "user_id" => $user->id,
+            "name" => $user->name,
             "message" => "Login Successful"]);
             } else {
 
@@ -98,7 +99,9 @@ public function addProduct()
         "category" => $this->request->getPost('category'),
         "price" => $this->request->getPost('price'),
         "description" => $this->request->getPost('description'),
-        "stock" => $this->request->getPost('stock')
+        "stock" => $this->request->getPost('stock'),
+        "store_id" => $this->request->getVar('store_id'),
+"store_name" => $this->request->getVar('store_name')
     ];
 
     // IMAGE
@@ -174,7 +177,7 @@ public function getProducts()
     $builder = $productModel->builder();
 
     $page  = $this->request->getGet('page') ?? 1;
-    $limit = 20; 
+    $limit = 25; 
     $offset = ($page - 1) * $limit;
 
     $builder->select("products.*,
@@ -1145,31 +1148,86 @@ public function cancelOrder()
 }
 public function storeProducts($store_id)
 {
-    $productModel = new ProductModel();
+    $db = \Config\Database::connect();
 
-    $products = $productModel
-        ->where('store_id', $store_id)
-        ->findAll();
+    try {
 
-    return $this->response->setJSON([
-        "status" => true,
-        "data" => $products
-    ]);
+        $page = (int) ($this->request->getGet('page') ?? 1);
+        $limit = 12;
+        $offset = ($page - 1) * $limit;
+
+        $search = $this->request->getGet('search');
+
+        // BASE QUERY (FILTER BY STORE_ID)
+        $builder = $db->table('products')
+            ->where('store_id', $store_id);
+
+        if (!empty($search)) {
+            $builder->like('name', $search);
+        }
+
+        // COUNT QUERY
+        $countBuilder = $db->table('products')
+            ->where('store_id', $store_id);
+
+        if (!empty($search)) {
+            $countBuilder->like('name', $search);
+        }
+
+        $total = $countBuilder->countAllResults();
+
+        // DATA QUERY
+        $products = $builder
+            ->limit($limit, $offset)
+            ->get()
+            ->getResult();
+
+        return $this->response->setJSON([
+            "status" => true,
+            "data" => $products,
+            "totalPages" => ceil($total / $limit),
+            "page" => $page
+        ]);
+
+    } catch (\Throwable $e) {
+        return $this->response->setJSON([
+            "status" => false,
+            "error" => $e->getMessage()
+        ]);
+    }
 }
-
 public function storeList()
 {
     $db = \Config\Database::connect();
+    $search = $this->request->getGet('search');
 
-    $stores = $db->query("
-        SELECT DISTINCT store_id, store_name
-        FROM products
-        WHERE store_id IS NOT NULL
-    ")->getResult();
+    $builder = $db->table('products')
+        ->select('store_id, store_name')
+        ->where('store_id IS NOT NULL')
+        ->where('store_name IS NOT NULL')
+        ->distinct();
+
+    if (!empty($search)) {
+        $builder->like('store_name', $search);
+    }
+
+    $query = $builder->get();
 
     return $this->response->setJSON([
         "status" => true,
-        "data" => $stores
+        "data" => $query->getResult()
     ]);
 }
-      }
+public function deleteStoreProduct($id)
+{
+    $productModel = new ProductModel();
+
+    $productModel->delete($id);
+
+    return $this->response->setJSON([
+        "status" => true,
+        "message" => "Product deleted successfully"
+    ]);
+}
+
+}

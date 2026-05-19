@@ -4,6 +4,8 @@
   padding: 0;
   font-family: Arial, sans-serif;
 }
+
+/* TOP BAR */
 .top {
   position: fixed;
   top: 0;
@@ -18,22 +20,56 @@
   padding: 0 20px;
   z-index: 1000;
 }
+
+/* HAMBURGER */
+.menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 26px;
+}
+
+/* LAYOUT */
 .layout {
   display: flex;
   margin-top: 60px;
   min-height: calc(100vh - 60px);
+  width: 100%;
+  overflow-x: hidden;
 }
+
+/* SIDEBAR */
 .side {
   width: 220px;
+  min-width: 220px;
   background: #ffffff;
-  color: whiīl̥īl̥te;
   padding: 15px;
+  flex-shrink: 0;
+  transition: 0.3s;
 }
+
+.close{
+ display: none;
+  position: absolute;
+  top: 10px;
+  left: 10px;   /* 👈 change here */
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 9999;
+}
+
+/* MENU */
 .sidebar-menu {
   list-style: none;
   margin-top: 15px;
-  margin-right: 20px;
 }
+
 .sidebar-menu li {
   padding: 12px;
   margin-bottom: 10px;
@@ -43,50 +79,52 @@
   cursor: pointer;
   transition: 0.3s;
 }
+
 .sidebar-menu li:hover {
   background: #475569;
   transform: translateX(5px);
 }
+
 .sidebar-menu li.active {
   background: #1e3a8a;
 }
+
+/* MAIN CONTENT */
 .main-content {
   flex: 1;
+  min-width: 0;
   padding: 20px;
   background: #f1f5f9;
+  overflow-x: auto;
 }
-button {
-  cursor: pointer;
-}
-img {
-  max-width: 100%;
-  height: auto;
-}
-/* response */
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
-  .layout {
-    flex-direction: column;
+
+  .menu-btn {
+    display: block;
   }
+
   .side {
-    width: 100%;
-    padding: 10px;
+    position: fixed;
+    top: 60px;
+    left: -260px;
+    height: calc(100vh - 60px);
+    z-index: 2000;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    background: white;
   }
-  .sidebar-menu {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
+
+  .side.open {
+    left: 0;
   }
-  .sidebar-menu li {
-    margin: 0;
-    font-size: 11px;
-    color: white;
-    padding: 8px 4px;
-    text-align: center;
+
+  .close {
+    display: block;
   }
-  .sidebar-menu li:hover {
-    transform: none;
-  }
+
   .main-content {
+    width: 100%;
     padding: 10px;
   }
 }

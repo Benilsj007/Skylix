@@ -157,7 +157,7 @@ const [toast, setToast] = useState("");
                 <option value="">Select Role</option>
                 <option value="admin">Admin</option>
                 <option value="user">User</option>
-                <option value="Store Owner">Store Owner</option>
+                <option value="storeowner">Store Owner</option>
               </select>
             </div>
           </div>

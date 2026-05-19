@@ -47,7 +47,11 @@ function App() {
         <Route path="/admin" element={<AdminDashboard />}>
 
           {/* DEFAULT */}
-          <Route index element={<AdminHome />} />          
+          <Route index element={<AdminHome />} /> 
+                    <Route path="store-details" element={<StoreDetails />} />
+              {/* <Route path="store-members" element={<StoreMembers />} /> */}
+
+         
           {/* CHILD ROUTES */}
           <Route path="products" element={<Products />} />
           <Route path="products/edit" element={<EditProduct />} />
@@ -55,9 +59,12 @@ function App() {
           <Route path="users" element={<Userupdate />} />
           <Route path="users/edit" element={<UserEdit />} />
           <Route path="orders" element={<OrderStatus />} />
-          <Route path="store-details" element={<StoreDetails />} />
 
           </Route>
+            
+            {/* <Route path="store-details" element={<StoreDetails />} /> */}
+
+
  
         <Route path="/home" element={<Home />}>
 

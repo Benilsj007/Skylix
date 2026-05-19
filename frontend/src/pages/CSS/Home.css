@@ -298,3 +298,28 @@ body {
     font-size: 13px;
   }
 }
+@media (max-width: 768px) {
+   
+  
+  .products-section p{
+    font-size:medium;
+  }
+   .product-card{
+    height: 250px;
+  }
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  .category-list {
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+    .pagination {
+    gap: 8px;
+  }
+  .pagination button {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+}

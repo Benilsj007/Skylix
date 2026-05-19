@@ -926,7 +926,7 @@ public function orderList()
     foreach ($orders as &$order) {
 
         // ✅ STORE OWNER FILTER
-        if ($role == "Store Owner") {
+        if ($role == "storeowner") {
 
             $items = $db->query("
                 SELECT 
@@ -967,7 +967,7 @@ public function orderList()
     }
 
     // ✅ REMOVE EMPTY ORDERS FOR STORE OWNER
-    if ($role == "Store Owner") {
+    if ($role == "storeowner") {
 
         $orders = array_filter($orders, function ($order) {
             return !empty($order->items);

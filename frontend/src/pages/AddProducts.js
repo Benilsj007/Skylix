@@ -232,11 +232,7 @@ function AddProduct() {
         Add Product
       </button>
 
-      <button className="btn btn-dark mt-3 ms-3" onClick={() => navigate("/admin/products")}>
-        View Products
-      </button>
-
-      <button className="btn btn-secondary mt-3 ms-3" onClick={() => navigate("/admin/products")}>
+      <button className="btn btn-secondary mt-3 ms-3" onClick={() => navigate(-1)}>
         Cancel
       </button>
     </div>

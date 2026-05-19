@@ -320,7 +320,7 @@ class ExcelController extends Controller
 
             $role = strtolower(trim($row[7] ?? 'user'));
 
-            if (!in_array($role, ['admin', 'user', 'store owner'])) {
+            if (!in_array($role, ['admin', 'user', 'storeowner'])) {
                 $role = 'user';
             }
 
@@ -393,7 +393,7 @@ public function exportUsers()
             // 🔴 NO HASHED PASSWORD
             $u['password'],
 
-            in_array($u['role'], ['admin','user','store owner'])
+            in_array($u['role'], ['admin','user','storeowner'])
                 ? $u['role']
                 : 'user'
         ];

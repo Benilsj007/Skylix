@@ -26,34 +26,40 @@ public function __construct()
 
 /* LOGIN */
  
-public function login(){
+public function login()
+{
+    $db = \Config\Database::connect();
+    $data = $this->request->getJSON(true);
 
-        $db = \Config\Database::connect();
+    $email = $data['email'];
+    $password = $data['password'];
 
-        $data = $this->request->getJSON(true);
+    $query = $db->table('login_details')
+        ->where('email', $email)
+        ->get();
 
-        $email = $data['email'];
-        $password = $data['password'];
+    $user = $query->getRow();
 
-        $query = $db->query("SELECT * FROM login_details WHERE email='$email' AND password='$password'");
+    if ($user && $password === $user->password) {
 
-        $user = $query->getRow();
+        $jwtService = new \App\Libraries\JWTService();
+        $token = $jwtService->generateToken($user);
 
-        if ($user) {
-            return $this->response->setJSON([
+        return $this->response->setJSON([
             "status" => true,
+            "token" => $token,
             "role" => $user->role,
             "user_id" => $user->id,
             "name" => $user->name,
-            "message" => "Login Successful"]);
-            } else {
+            "message" => "Login Successful"
+        ]);
+    }
 
-                    return $this->response->setJSON([
-                           "status" => false,
-                           "message" => "Invalid Email or Password"]);
-                  }
-        }
-
+    return $this->response->setJSON([
+        "status" => false,
+        "message" => "Invalid Email or Password"
+    ]);
+}
 /* REGISTER */
 
 public function register(){

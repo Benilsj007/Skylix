@@ -44,6 +44,7 @@ public function login(){
             "status" => true,
             "role" => $user->role,
             "user_id" => $user->id,
+            "name" => $user->name,
             "message" => "Login Successful"]);
             } else {
 
@@ -98,7 +99,9 @@ public function addProduct()
         "category" => $this->request->getPost('category'),
         "price" => $this->request->getPost('price'),
         "description" => $this->request->getPost('description'),
-        "stock" => $this->request->getPost('stock')
+        "stock" => $this->request->getPost('stock'),
+        "store_id" => $this->request->getVar('store_id'),
+"store_name" => $this->request->getVar('store_name')
     ];
 
     // IMAGE
@@ -142,7 +145,6 @@ public function addProduct()
             "graphics_card" => $this->request->getPost('graphics_card'),
             "screen_size" => $this->request->getPost('screen_size'),
             "brand" => $this->request->getPost('brand')
-
             ]);
     }
 
@@ -159,6 +161,9 @@ public function addProduct()
         ]);
     }
 
+     $sync = new \App\Libraries\ExcelSyncService();
+    $sync->sync(); 
+    
     return $this->response->setJSON([
         "status" => true,
         "message" => "Product Added Successfully"
@@ -172,7 +177,7 @@ public function getProducts()
     $builder = $productModel->builder();
 
     $page  = $this->request->getGet('page') ?? 1;
-    $limit = 20; 
+    $limit = 25; 
     $offset = ($page - 1) * $limit;
 
     $builder->select("products.*,
@@ -519,6 +524,7 @@ public function deleteProduct($id)
             return $this->response->setJSON($user);
             }
 
+
  public function updateUser($id){
             $db = \Config\Database::connect();
             $data = $this->request->getJSON(true);
@@ -528,7 +534,6 @@ public function deleteProduct($id)
                     "status"=>false,
                     "message"=>"No data received"]);
             }
-
             $db->query("UPDATE login_details SET 
                         name='".$data['name']."',
                         email='".$data['email']."',
@@ -542,6 +547,7 @@ public function deleteProduct($id)
                    "status"=>true,
                    "message"=>"User Updated Successfully"]);
         }
+
 /* DELETE USER */
     public function deleteUser($id){
                 $db = \Config\Database::connect();
@@ -551,7 +557,8 @@ public function deleteProduct($id)
                        "status"=>true,
                        "message"=>"User Deleted"]);
           }
-    //    =======================================
+    //    
+
     public function userList(){
 
     $model = new UserModel();
@@ -612,7 +619,7 @@ public function deleteProduct($id)
         "page" => (int)$page,
         "totalPages" => ceil($total / $limit)
     ]);
-}
+} 
 
 public function productfilter()
 {
@@ -826,12 +833,6 @@ public function placeOrder()
                 $item->price
             ]);
         }
-
-        // CLEAR CART ONLY IF CART FLOW
-        // if (empty($products)) {
-        //     $db->query("DELETE FROM cart WHERE user_id = ?", [$user_id]);
-        // }
-
         //  ALWAYS CLEAR CART AFTER ORDER
 $db->query("DELETE FROM cart WHERE user_id = ?", [$user_id]);
 
@@ -925,7 +926,7 @@ public function orderList()
     foreach ($orders as &$order) {
 
         // ✅ STORE OWNER FILTER
-        if ($role == "Store Owner") {
+        if ($role == "storeowner") {
 
             $items = $db->query("
                 SELECT 
@@ -966,7 +967,7 @@ public function orderList()
     }
 
     // ✅ REMOVE EMPTY ORDERS FOR STORE OWNER
-    if ($role == "Store Owner") {
+    if ($role == "storeowner") {
 
         $orders = array_filter($orders, function ($order) {
             return !empty($order->items);
@@ -1147,15 +1148,86 @@ public function cancelOrder()
 }
 public function storeProducts($store_id)
 {
-    $productModel = new ProductModel();
+    $db = \Config\Database::connect();
 
-    $products = $productModel
-        ->where('store_id', $store_id)
-        ->findAll();
+    try {
+
+        $page = (int) ($this->request->getGet('page') ?? 1);
+        $limit = 12;
+        $offset = ($page - 1) * $limit;
+
+        $search = $this->request->getGet('search');
+
+        // BASE QUERY (FILTER BY STORE_ID)
+        $builder = $db->table('products')
+            ->where('store_id', $store_id);
+
+        if (!empty($search)) {
+            $builder->like('name', $search);
+        }
+
+        // COUNT QUERY
+        $countBuilder = $db->table('products')
+            ->where('store_id', $store_id);
+
+        if (!empty($search)) {
+            $countBuilder->like('name', $search);
+        }
+
+        $total = $countBuilder->countAllResults();
+
+        // DATA QUERY
+        $products = $builder
+            ->limit($limit, $offset)
+            ->get()
+            ->getResult();
+
+        return $this->response->setJSON([
+            "status" => true,
+            "data" => $products,
+            "totalPages" => ceil($total / $limit),
+            "page" => $page
+        ]);
+
+    } catch (\Throwable $e) {
+        return $this->response->setJSON([
+            "status" => false,
+            "error" => $e->getMessage()
+        ]);
+    }
+}
+public function storeList()
+{
+    $db = \Config\Database::connect();
+    $search = $this->request->getGet('search');
+
+    $builder = $db->table('products')
+        ->select('store_id, store_name')
+        ->where('store_id IS NOT NULL')
+        ->where('store_name IS NOT NULL')
+        ->distinct();
+
+    if (!empty($search)) {
+        $builder->like('store_name', $search);
+    }
+
+    $query = $builder->get();
 
     return $this->response->setJSON([
         "status" => true,
-        "data" => $products
+        "data" => $query->getResult()
     ]);
 }
-      }
+public function deleteStoreProduct($id)
+{
+    $productModel = new ProductModel();
+
+    $productModel->delete($id);
+
+    return $this->response->setJSON([
+        "status" => true,
+        "message" => "Product deleted successfully"
+    ]);
+}
+
+}

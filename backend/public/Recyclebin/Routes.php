@@ -2,17 +2,15 @@
 
 use CodeIgniter\Router\RouteCollection;
 
-/**
- * @var RouteCollection $routes
- */
+         /**
+          * @var RouteCollection $routes
+           */
 
 $routes->get('/', 'Home::index');
 
 
 
-/* =========================
-   CORS (ONLY ONCE - FIXED)
-========================= */
+
 $routes->options('(:any)', function () {
     return service('response')
         ->setStatusCode(200)
@@ -24,17 +22,12 @@ $routes->options('(:any)', function () {
 
 
 
-/* =========================
-   AUTHENTICATION
-========================= */
 $routes->post('login', 'Authentication::login');
 $routes->post('register', 'Authentication::register');
 
 
 
-/* =========================
-   PRODUCTS
-========================= */
+
 $routes->post('add-product', 'Authentication::addProduct');
 $routes->get('products', 'Authentication::getProducts');
 $routes->get('getProducts', 'Authentication::getProducts');
@@ -45,9 +38,6 @@ $routes->post('delete-product/(:num)', 'Authentication::deleteProduct/$1');
 
 
 
-/* =========================
-   USERS
-========================= */
 $routes->get('users', 'Authentication::users');
 $routes->post('update-user/(:num)', 'Authentication::updateUser/$1');
 $routes->post('delete-user/(:num)', 'Authentication::deleteUser/$1');
@@ -56,16 +46,12 @@ $routes->get('user-filter', 'Authentication::userList');
 
 
 
-/* =========================
-   PRODUCT FILTER
-========================= */
+
 $routes->get('product-filter', 'Authentication::productfilter');
 
 
 
-/* =========================
-   CART
-========================= */
+
 $routes->post('add-to-cart', 'Authentication::addToCart');
 $routes->get('get-cart/(:num)', 'Authentication::getCart/$1');
 $routes->post('update-cart', 'Authentication::updateCart');
@@ -73,29 +59,33 @@ $routes->post('remove-cart', 'Authentication::removeCart');
 
 
 
-/* =========================
-   ORDER SYSTEM
-========================= */
+
 $routes->post('place-order', 'Authentication::placeOrder');
 $routes->get('getAllOrders', 'Authentication::getAllOrders');
 $routes->get('orderList', 'Authentication::orderList');
 
 
 
-/* =========================
-   ORDER ITEMS (IMPORTANT)
-========================= */
 $routes->get('order-items/(:num)', 'Authentication::getOrderItems/$1');
 
 
 
-/* =========================
-   PAYMENT SYSTEM
-========================= */
+
 $routes->post('pay-order', 'Authentication::payOrder');
 $routes->get('pending-orders/(:num)', 'Authentication::getPendingOrders/$1');
 $routes->post('cancel-order', 'Authentication::cancelOrder');
 
-
-
+$routes->get('store-list', 'Authentication::storeList');
 $routes->get('store-products/(:num)', 'Authentication::storeProducts/$1');
+$routes->post('delete-store-product/(:num)', 'Authentication::deleteStoreProduct/$1');
+
+
+
+$routes->get('excel/export', 'ExcelController::exportExcel');
+$routes->post('excel/import', 'ExcelController::importExcel');
+
+$routes->post('excel/import-users', 'ExcelController::importUsers');
+$routes->get('excel/export-users', 'ExcelController::exportUsers');
+
+
+$routes->post('upload-product-image/(:num)', 'ExcelController::uploadProductImage/$1');

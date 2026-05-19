@@ -52,24 +52,19 @@ const login = async () => {
        password: password
 });
 
-       if(res.data.status){
+     if (res.data.status) {
+  localStorage.setItem("token", res.data.token);
 
-localStorage.setItem("user", JSON.stringify({
+  localStorage.setItem("user", JSON.stringify({
     user_id: res.data.user_id,
     role: res.data.role,
-    name: res.data.name   // ✅ IMPORTANT
+    name: res.data.name
   }));
 
-// check user role
-       if(res.data.role === "admin"){
-              navigate("/admin");
-              }
-              else if(res.data.role === "storeowner"){
-                     navigate("/store");
-              }else{
-                   navigate("/home");
-          }
-          }else{
+  if (res.data.role === "admin") navigate("/admin");
+  else if (res.data.role === "storeowner") navigate("/store");
+  else navigate("/home");
+}else{
                showToast(res.data.message);
           }
           }catch(error){
